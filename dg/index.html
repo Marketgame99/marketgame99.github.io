@@ -5,7 +5,7 @@ table, th, td {
 }
 </style>
 <body style="background-color:#FFD097">
-<title>PS3 Flasher</title><center><h1><span style='color:#0055AA'>MARKET GAME<br><span style='color:#000000'> Hybrid Firmware (HFW)<span style="color: #FF0000">4.91.2 MG<span style='color: #0055AA'><br>Tool Flasher Downgrade</span></h1><hr>
+<title>PS3 Flasher</title><center><h1><span style='color:#0055AA'>MARKET GAME<br><span style='color:#000000'> Hybrid Firmware (HFW)<span style="color: #FF0000">4.93<span style='color: #0055AA'><br>Tool Flasher Downgrade</span></h1><hr>
 <br>
 	<div id="dropdown">
 	<h3>Select USB Flash Dumping Device</h3>
@@ -108,9 +108,9 @@ var ftype = "NOR",
 	ua = navigator.userAgent,
 	fwv = ua.substring(ua.indexOf("5.0 (") + 19, ua.indexOf(") Apple")),
 	dump_path = "/dev_usb000/",
-	dump_file = "PS3FlashDump491OFW.bin",
-	fulldumppath = "/dev_usb000/PS3FlashDump491OFW.bin",
-	base_file = "xxxx/dev_hdd0/theme/flash491.P3T",
+	dump_file = "PS3FlashDump493OFW.bin",
+	fulldumppath = "/dev_usb000/PS3FlashDump493OFW.bin",
+	base_file = "xxxx/dev_hdd0/theme/flash493.P3T",
 	fail_msg_frag = "<h3><span style='color:red'>Memory search failed! Restart the browser and try again.</h3></span>",
 	progress_msg_frag1 = "<h3>Finding variable offsets... ",
 	progress_msg_frag2 = '%</h3>',
@@ -381,7 +381,7 @@ function checkMemory(address, size, len)
 }
 function trigger(exploit_addr){
 	if(document.getElementById('trigger')){document.getElementById("trigger").innerHTML = -parseFloat("NAN(ffffe" + exploit_addr.toString(16) + ")");}
-	if (document.getElementById('trigger').innerHTML.indexOf("NaN") != -1) {HFWmsg()}
+	if(document.getElementById('trigger').innerHTML.indexOf("NaN") != -1) {HFWmsg()}
 }
 function load_check()
 {
@@ -464,10 +464,9 @@ function initROP(init)
 	document.getElementById("init").disabled = true;
 	document.getElementById("nand").disabled = true;
 	document.getElementById("dropdown").style.display = "none";
-	if(fwv!="4.91"){HFWmsg()}
+	if(fwv!="4.93"){HFWmsg()}
 	try
 	{
-
 		if(init===true){frame_fails=0;search_base_off=0;search_size_ext=0;}
 		if(t_out!==0){clearTimeout(t_out);t_out=0;}
 		offset_array=[];
@@ -825,8 +824,8 @@ function triggerX()
 	total_loops=0;
 }
 function checkVsh()
-{
-	if(vshchk.hashCode() != '-579244910')
+{	
+	if(vshchk.hashCode() != '100679652')
 	{
 		showResult("<h3><span style='color:red'>You cannot use this tool because you have already installed CFW!</span></h3>");
 	}
@@ -834,7 +833,7 @@ function checkVsh()
 	{
 		document.getElementById('result').focus();
 		showResult('<h3>Downloading patch file...</h3>');
-		window.location.href = 'flash491.P3T';
+		window.location.href = 'flash493.P3T';
 		setTimeout(listener,1500);
 	}
 }
@@ -860,7 +859,7 @@ function checkPatch()
 }
 function checkHash()
 {
-	if(chk.hashCode() != '539371423')
+	if(chk.hashCode() != '1984323195') // 539371423 // 000000041
 	{
 		showResult("<h3><span style='color:red'>Patch operation aborted due to patch file hash mismatch!</span></h3>");
 		//alert(chk.hashCode());
@@ -919,7 +918,7 @@ function listener()
 }
 function HFWmsg()
 {
-	showResult("<h3><span style='color:red'>You must install Hybrid Firmware (HFW) 4.91 before using this tool!</h3></span>");
+	showResult("<h3><span style='color:red'>You must install Hybrid Firmware (HFW) 4.93 before using this tool!</h3></span>");
 	throw new Error();
 }
 </script>
