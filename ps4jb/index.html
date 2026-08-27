@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 Exploit</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            /* Read the image from the same folder */
+            background-image: url('background.png'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            background-color: #121212;
+        }
+        #result, #user-agent {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" src="../music_background.mp3" autoplay loop></audio>
+
+    <div id="result"></div>
+    <div id="user-agent"></div>
+
+    <script>
+        function processDevice() {
+            const audio = document.getElementById('bg-music');
+            if (audio) {
+                audio.play().catch(function(error) {
+                    console.log("Autoplay hindered.");
+                });
+            }
+
+            const userAgent = navigator.userAgent;
+            const isPS4 = /PlayStation 4|PS4/i.test(userAgent);
+            
+            if (isPS4) {
+                const fwMatch = userAgent.match(/(?:PlayStation 4|PS4)[\s\/]+([\d\.]+)/i);
+                if (fwMatch && fwMatch[1]) {
+                    const firmware = parseFloat(fwMatch[1]);
+                    
+                    /* The timing here is set to 15,000 milliseconds (i.e., exactly 15 seconds) */
+                    if (firmware >= 5.00 && firmware <= 9.60) {
+                        setTimeout(() => { window.location.href = "505_960/index.html"; }, 10000);
+                    } else if (firmware >= 10.00 && firmware <= 11.02) {
+                        setTimeout(() => { window.location.href = "1000_1102/index.html"; }, 10000);
+                    } else if (firmware >= 11.50 && firmware <= 13.00) {
+                        setTimeout(() => { window.location.href = "1150-1300/index.html"; }, 10000);
+                    }
+                }
+            }
+        }
+        window.onload = processDevice;
+    </script>
+</body>
+</html>
