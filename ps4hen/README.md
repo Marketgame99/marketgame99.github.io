@@ -1,1 +1,0 @@
-# PS4 on firmware 12.00-14.02
