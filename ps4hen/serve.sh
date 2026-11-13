@@ -7,12 +7,13 @@
 # Two things this has to get right, and a plain `python3 -m http.server`
 # gets one of them wrong:
 #
-#   * no-store on code. The console's browser holds on to modules, and a
+#   * revalidation on code. The console's browser holds on to modules, and a
 #     corrected file would otherwise never arrive. That matters most for the
 #     payloads: a cached .bin would keep running after you swapped it, and an
-#     unpatched ps4-hen freezes the console. Images are cached, since a stale
-#     picture harms nobody.
-#   * text/javascript for .js, so the ES modules load as modules.
+#     unpatched ps4-hen freezes the console. Images are cached outright, since
+#     a stale picture harms nobody.
+#   * text/javascript for .js, so the ES modules load as modules, and
+#     text/cache-manifest for .appcache, or the offline cache never fills.
 #
 # Settings the pages remember (the payload choice, autostart) live in the
 # browser's localStorage and are unaffected by any of this.

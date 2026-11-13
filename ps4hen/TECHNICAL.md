@@ -51,8 +51,11 @@ its `PATCHES` table and ten more written by its bootstrap stub. The remaining
 **32** are exactly the ones GoldHEN's code looks for: one block of 29 from
 `0x125791` to `0x125871`, plus `0x2fcb5c`, `0x391fc6` and `0x3be3c0`.
 
-`patchset.bin` (641 bytes, position independent, ends in `ret`) therefore runs
-before **every** GoldHEN payload, in both image forms.
+That set is position independent and ends in `ret`, and it runs before
+**every** GoldHEN payload, in both image forms. It writes fixed kernel
+addresses, so there is one per firmware — `patchset-1400.bin` (641 bytes) and
+`patchset-1352.bin` (632 bytes) — and `afterglow.js` fetches the one that
+matches the firmware it was given.
 
 ## Two guards
 
@@ -61,9 +64,14 @@ before **every** GoldHEN payload, in both image forms.
   last page it had open; without this, a page left on the armed chain would run
   it again with nobody in front of the screen. The guard sits in `jb.js`, not
   in the server, so it holds however the files are served.
-* **`no-store` on every response.** The console's browser holds on to modules,
-  and a corrected file would otherwise never arrive. `serve.sh` sets it; any
-  other server used instead has to do the same.
+* **Caching the console can be trusted with.** That browser holds on to
+  modules, so a corrected file has to be able to arrive. The pages declare an
+  HTML5 Application Cache (`cache.appcache`), in which every entry carries a
+  hash of its contents — any edit changes the manifest, so the console
+  refetches instead of serving a stale module. `make-manifest.sh` rebuilds it
+  and has to be run after changing any shipped file. `serve.sh` additionally
+  sends `no-cache, must-revalidate`, which keeps the file but makes every use
+  of it conditional; any other server used instead has to do the same.
 
 ## The ps4-hen offset
 
@@ -81,6 +89,40 @@ its entry, on every PFS mount — that is, on every application launch.
 
 `RsaesPkcs1v15Dec2048CRT_addr = 0x0021BFC0` has no prologue either (nearest at
 `0x0021BD20`), but it is never called directly, so this is unconfirmed.
+
+## Where the code comes from
+
+Three layers, and they are not the same provenance.
+
+`afterglow.js` and the patch sets are this work. `jb.js`, `ps4_offsets.js` and
+the page scaffolding are raw13g's, under MIT.
+
+`core.js`, `mem.js` and `int64.js` are a fork of the primitive from
+[slopkit](https://github.com/jordyidk/slopkit), a PS5 jailbreak, reworked for
+this firmware and taken from the raw13g host. The derivation is visible in the
+files themselves: the first fifteen lines are slopkit's constants unchanged
+(`K=2`, `DUPLICATE_INDEX=2`, `CONTROL_INT=-64000`, `EXPECTED_LENGTH=0x50001`),
+and slopkit's own `REVISION` marker travels along — `slopkit-core-final` there,
+`slopkit-core-1` here. Where slopkit documents the 9.00 heap geometry, this
+copy carries the profiles for 14.00 instead.
+
+| | changed against slopkit | changed against the raw13g copy |
+|---|---|---|
+| `core.js` | 2434 lines | 125 |
+| `mem.js` | 1439 lines | 19 |
+| `int64.js` | 156 lines | 0, byte for byte |
+
+slopkit carries no license file, and raw13g's MIT license names these three as
+third-party rather than relicensing them, so no grant reaches them from either
+side.
+
+## The firmware tables
+
+Every address afterglow hardcodes lives in a per-firmware table, chosen by
+`setFirmware()` before anything is touched; a firmware with no table is
+refused rather than run with someone else's offsets.
+
+Every firmware in the table has been confirmed on hardware.
 
 ## Scope
 

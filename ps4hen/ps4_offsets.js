@@ -637,6 +637,24 @@ PS4["14.00"] = Object.assign({}, PS4["13.52"], {
   k_rootvnode: undefined,
 });
 
+/* 14.02 inherits the userland offsets from 14.00.
+ *
+ * Between 13.52 and 14.00, 21 of 22 wk_ fields were already bit-identical --
+ * 14.00 runs WebKit from 13.52 verbatim. That 14.02 does the same is assumed,
+ * not measured. The assumption is not dangerous: jb.js compares each of the
+ * 15 WebKit gadgets byte for byte before it uses one, and stops with
+ * GADGET-BAD <name> rather than running on a wrong address. afterglow checks
+ * all 14 libc gadgets and the HOST room the same way.
+ *
+ * The kernel addresses are derived, not inherited -- they live in afterglow.js
+ * and they are the only ones written without a check.
+ */
+PS4["14.02"] = Object.assign({}, PS4["14.00"], {
+  fw_status:
+    "state=14.02 webkit=inherited-from-14.00 (unmeasured, checked at runtime) " +
+    "kernel=afterglow (apm-UAF, own kernel stage) payload=hen.bin|goldhen.bin",
+});
+
 export function offsetsFor(uaString) {
   const m = (uaString || "").match(/PlayStation\s+4[\/ ](\d+)\.(\d+)/);
   if (!m) return { key: null, off: null };

@@ -3,20 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>PS4 Exploit</title>
+    <title>afterglow</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Every run starts from here. The referrer guard in jb.js arms the chain
          only when it was reached from this page, so that a browser restoring
          its last session cannot re-run it unattended. -->
-    <div id="brand"><b>PS4 Exploit</b></div>
+    <div id="brand"><b>afterglow</b></div>
 
     <div class="shell">
       <img class="meme" src="meme.png" alt="" />
 
       <main class="panel">
-        <p class="lede">PS4 kernel exploit &middot; firmware 13.52 and 14.00</p>
+        <p class="lede">PS4 firmware 12.00 &ndash; 14.02</p>
 
         <form class="pick" id="pick">
           <label class="opt">
@@ -35,11 +35,12 @@
 
           <button class="btn" type="submit">start</button>
           <p class="count" id="count"></p>
+          <p class="count" id="cache" aria-live="polite"></p>
         </form>
       </main>
     </div>
 
-    <p class="byline">Jailbreak</p>
+    <p class="byline">by well0nez/m0zz</p>
     <script src="launch.js"></script>
   </body>
 </html>
